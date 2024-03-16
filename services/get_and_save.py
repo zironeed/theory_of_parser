@@ -10,6 +10,8 @@ def get_page_numbers(url):
     :param url: урлы
     :return: необходимые ссылки на страницы
     """
+    print('getting links to pages...')
+
     links = []
     soup = BeautifulSoup(requests.get(url).text, 'lxml')
     quotes = soup.find_all('a', class_='link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover')
@@ -18,6 +20,7 @@ def get_page_numbers(url):
         page_number = re.search(r'/(\d+)', link.get('href')).group(1)
         links.append(page_number)
 
+    print('done!')
     return links
 
 
@@ -27,6 +30,8 @@ def get_requests(links):
     :param links: страницы
     :return: список вопросов (список кортежей)
     """
+    print('getting information from pages...')
+
     questions = []
 
     for link in links:
@@ -46,6 +51,7 @@ def get_requests(links):
 
         questions.append((title_text, text_final))
 
+    print('done!')
     return questions
 
 
@@ -55,6 +61,8 @@ def save_to_csv(questions: list):
     :param questions: вопросы
     :return: пусто
     """
+    print('saving questions to a CSV-file...')
+
     file_name = 'data.csv'
 
     with open(file_name, 'w', newline='', encoding='UTF-8') as file:
@@ -69,4 +77,4 @@ def save_to_csv(questions: list):
                 'answer': info[1]
             })
 
-    print('done')
+    print('done!')
