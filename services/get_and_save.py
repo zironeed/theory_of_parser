@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import csv
-import psycopg2
 import requests
 import re
 
@@ -39,9 +38,13 @@ def get_requests(links):
 
         text = soup.find_all('p', class_='card-text')
         text_list = [re.sub('<[^<]+?>', '', str(p)) for p in text]
-        text_list = [p.replace('\n\n', '') for p in text_list]
 
-        questions.append((title_text, text_list))
+        try:
+            text_final = text_list[0].replace('\n\n', '')
+        except IndexError:
+            text_final = ''
+
+        questions.append((title_text, text_final))
 
     return questions
 
@@ -50,7 +53,7 @@ def save_to_csv(questions: list):
     """
     Сохраняем вопросики в CSV-файл
     :param questions: вопросы
-    :return: пока не придумал
+    :return: пусто
     """
     file_name = 'data.csv'
 
@@ -63,8 +66,7 @@ def save_to_csv(questions: list):
         for info in questions:
             writer.writerow({
                 'question': info[0],
-                'answer': info[1:]
+                'answer': info[1]
             })
 
     print('done')
-
