@@ -7,8 +7,5 @@ def main():
     save_to_csv(questions)
 
 
-    print(questions)
-
-
 if __name__ == '__main__':
     main()
