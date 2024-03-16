@@ -1,4 +1,6 @@
 from bs4 import BeautifulSoup
+import csv
+import psycopg2
 import requests
 import re
 
@@ -44,10 +46,25 @@ def get_requests(links):
     return questions
 
 
-def save_to_db(questions: list):
+def save_to_csv(questions: list):
     """
-    Сохраняем вопросики в БД
+    Сохраняем вопросики в CSV-файл
     :param questions: вопросы
     :return: пока не придумал
     """
-    pass
+    file_name = 'data.csv'
+
+    with open(file_name, 'w', newline='', encoding='UTF-8') as file:
+        fieldnames = ['question', 'answer']
+
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for info in questions:
+            writer.writerow({
+                'question': info[0],
+                'answer': info[1:]
+            })
+
+    print('done')
+
