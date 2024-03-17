@@ -4,10 +4,30 @@ import requests
 import re
 
 
+def get_categories(url):
+    """
+    Получаем категории вопросов
+    :param url: урл
+    :return: список категорий
+    """
+    print('getting categories...')
+
+    categories = []
+    soup = BeautifulSoup(requests.get(url).text, 'lxml')
+    cats = soup.find_all('td', class_='d-none d-sm-table-cell')
+
+    for category in cats:
+        cat = re.sub(r'<[^>]*>', '', str(category))
+        categories.append(cat)
+
+    print('done!')
+    return categories
+
+
 def get_page_numbers(url):
     """
     Получаем номера страниц
-    :param url: урлы
+    :param url: урл
     :return: необходимые ссылки на страницы
     """
     print('getting links to pages...')
