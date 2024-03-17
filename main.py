@@ -5,7 +5,7 @@ def main():
     links = get_page_numbers('https://easyoffer.ru/rating/python_developer')
     categories = get_categories('https://easyoffer.ru/rating/python_developer')
     questions = get_requests(links)
-    save_to_csv(questions)
+    save_to_csv(questions, categories)
 
 
 if __name__ == '__main__':

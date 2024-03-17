@@ -75,10 +75,11 @@ def get_requests(links):
     return questions
 
 
-def save_to_csv(questions: list):
+def save_to_csv(questions: list, categories: list):
     """
     Сохраняем вопросики в CSV-файл
     :param questions: вопросы
+    :param categories: список категорий
     :return: пусто
     """
     print('saving questions to a CSV-file...')
@@ -86,15 +87,16 @@ def save_to_csv(questions: list):
     file_name = 'data.csv'
 
     with open(file_name, 'w', newline='', encoding='UTF-8') as file:
-        fieldnames = ['question', 'answer']
+        fieldnames = ['question', 'answer', 'category']
 
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
 
-        for info in questions:
+        for ind in range(len(questions)):
             writer.writerow({
-                'question': info[0],
-                'answer': info[1]
+                'question': questions[ind][0],
+                'answer': questions[ind][1],
+                'category': categories[ind]
             })
 
     print('done!')
