@@ -61,15 +61,15 @@ def get_requests(links):
         title = soup.find_all('h1', class_='mt-5 mb-5 fs-3')
         title_text = re.sub('<[^<]+?>', '', str(title[0]))
 
-        text = soup.find_all('p', class_='card-text')
+        text = soup.find_all('div', class_='card-body')
         text_list = [re.sub('<[^<]+?>', '', str(p)) for p in text]
 
-        try:
-            text_final = text_list[0].replace('\n\n', '')
-        except IndexError:
-            text_final = ''
+        if text_list != []: text_list = text_list[0].split('\n')[1:-2]
+        text_str = ' '.join(text_list)
+        for i in ['\xa0', '\r', '\u202F']:
+            text_str = text_str.replace(i, ' ')
 
-        questions.append((title_text, text_final))
+        questions.append((title_text, text_str))
 
     print('done!')
     return questions
