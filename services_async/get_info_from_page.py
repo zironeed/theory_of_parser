@@ -1,12 +1,28 @@
 import aiohttp
 from bs4 import BeautifulSoup
-import csv
 import re
 
 
 async def fetch(session, url):
     async with session.get(url) as response:
         return await response.text()
+
+
+async def get_pagination(url):
+    """
+    Получаем количество страниц с вопросами
+    :param url: урл
+    :return: ссылки на следующие страницы
+    """
+    async with aiohttp.ClientSession() as session:
+        html = await fetch(session, url)
+        soup = BeautifulSoup(html, 'lxml')
+        pages = soup.find_all('a', class_='page-link')
+
+        for page in range(len(pages)):
+            pages[page] = re.sub(r'<a[^>]*>(\d+)<\/a>', r'\1', str(pages[page]))
+
+        return pages
 
 
 async def get_categories(url):
@@ -34,7 +50,7 @@ async def get_categories(url):
 
 async def get_page_numbers(url):
     """
-    Получаем номера страниц
+    Получаем номера страниц вопросов
     :param url: урл
     :return: необходимые ссылки на страницы
     """
@@ -81,30 +97,3 @@ async def get_requests(link):
             text_str = text_str.replace(i, ' ')
 
     return title_text, text_str
-
-
-def save_to_csv(questions: list, categories: list):
-    """
-    Сохраняем вопросики в CSV-файл
-    :param questions: вопросы
-    :param categories: список категорий
-    :return: пусто
-    """
-    print('saving questions to a CSV-file...')
-
-    file_name = 'data.csv'
-
-    with open(file_name, 'w', newline='', encoding='UTF-8') as file:
-        fieldnames = ['question', 'answer', 'category']
-
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writeheader()
-
-        for ind in range(len(questions)):
-            writer.writerow({
-                'question': questions[ind][0],
-                'answer': questions[ind][1],
-                'category': categories[ind]
-            })
-
-    print('done!')
