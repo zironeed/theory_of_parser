@@ -28,10 +28,12 @@ async def async_main():
     url = 'https://easyoffer.ru/rating/python_developer'
     pages = await get_info_from_page.get_pagination(url)
 
+    print('getting categories and links...')
     for page in pages:
         url += f'?page={page}'
         links.append(await get_info_from_page.get_page_numbers(url))
         categories.append(await get_info_from_page.get_categories(url))
+    print('done!')
 
     print('getting information from pages (about answers)...')
     questions = await asyncio.gather(*[get_info_from_page.get_requests(link) for link in links])

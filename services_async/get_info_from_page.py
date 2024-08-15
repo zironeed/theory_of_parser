@@ -31,7 +31,6 @@ async def get_categories(url):
     :param url: урл
     :return: список категорий
     """
-    print('getting categories...')
 
     categories = []
 
@@ -44,7 +43,6 @@ async def get_categories(url):
             cat = re.sub(r'<[^>]*>', '', str(category))
             categories.append(cat)
 
-    print('done!')
     return categories
 
 
@@ -54,7 +52,6 @@ async def get_page_numbers(url):
     :param url: урл
     :return: необходимые ссылки на страницы
     """
-    print('getting links to pages...')
 
     links = []
 
@@ -69,7 +66,6 @@ async def get_page_numbers(url):
             page_number = re.search(r'/(\d+)', link.get('href')).group(1)
             links.append(page_number)
 
-    print('done!')
     return links
 
 
