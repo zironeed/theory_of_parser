@@ -33,7 +33,6 @@ async def async_main():
         links.append(await get_info_from_page.get_page_numbers(url))
         categories.append(await get_info_from_page.get_categories(url))
 
-
     print('getting information from pages (about answers)...')
     questions = await asyncio.gather(*[get_info_from_page.get_requests(link) for link in links])
     print('done!')
