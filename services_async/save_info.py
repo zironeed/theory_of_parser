@@ -26,3 +26,7 @@ def save_to_csv(questions: list, categories: list):
             })
 
     print('done!')
+
+
+def save_to_sql():
+    ...
