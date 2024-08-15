@@ -12,6 +12,7 @@ load_dotenv(dotenv_path=env_path)
 async def async_main():
     start = time()
     links, categories = [], []
+    semaphore = asyncio.Semaphore(100)
 
     url = getenv('MAIN_URL')
     print('getting pages...')
@@ -26,7 +27,7 @@ async def async_main():
     print('done!')
 
     print('getting information from pages (about answers)...')
-    questions = await asyncio.gather(*[get_info_from_page.get_requests(link) for link in links])
+    questions = await asyncio.gather(*[get_info_from_page.get_requests(link, semaphore) for link in links])
     print('done!')
 
     save_info.save_to_csv(questions, categories)
