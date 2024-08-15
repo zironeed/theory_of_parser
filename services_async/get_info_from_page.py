@@ -23,6 +23,8 @@ async def get_pagination(url):
         for page in range(len(pages)):
             pages[page] = re.sub(r'<a[^>]*>(\d+)<\/a>', r'\1', str(pages[page]))
 
+        pages.append(1)
+
         return pages
 
 
@@ -70,22 +72,22 @@ async def get_page_numbers(url):
     return links
 
 
-async def get_requests(link):
+async def get_requests(link, sem):
     """
     Получаем информацию со страниц
     :param link: страницы
     :return: список вопросов (список кортежей)
     """
+    async with sem:
+        async with aiohttp.ClientSession() as session:
+            html = await fetch(session, getenv('SECONDARY_URL') + link)
+            soup = BeautifulSoup(html, 'lxml')
 
-    async with aiohttp.ClientSession() as session:
-        html = await fetch(session, getenv('SECONDARY_URL') + link)
-        soup = BeautifulSoup(html, 'lxml')
+            title = soup.find_all('h1', class_='mt-5 mb-5 fs-3')
+            title_text = re.sub('<[^<]+?>', '', str(title[0]))
 
-        title = soup.find_all('h1', class_='mt-5 mb-5 fs-3')
-        title_text = re.sub('<[^<]+?>', '', str(title[0]))
-
-        text = soup.find_all('div', class_='card-body')
-        text_list = [re.sub('<[^<]+?>', '', str(p)) for p in text]
+            text = soup.find_all('div', class_='card-body')
+            text_list = [re.sub('<[^<]+?>', '', str(p)) for p in text]
 
         if text_list:
             text_list = text_list[0].split('\n')[1:-2]
