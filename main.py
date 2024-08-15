@@ -3,7 +3,7 @@ from time import time
 
 from services.get_and_save import get_page_numbers, get_requests, save_to_csv, get_categories   # sync
 
-from services_async import get_info_from_page, save_info    # async
+from services_async import get_info_from_page, save_info                                        # async
 
 
 def main():
@@ -23,16 +23,19 @@ def main():
 
 async def async_main():
     start = time()
+    links, categories = [], []
 
     url = 'https://easyoffer.ru/rating/python_developer'
-
-    links = await get_info_from_page.get_page_numbers(url)
-    categories = await get_info_from_page.get_categories(url)
     pages = await get_info_from_page.get_pagination(url)
 
+    for page in pages:
+        url += f'?page={page}'
+        links.append(await get_info_from_page.get_page_numbers(url))
+        categories.append(await get_info_from_page.get_categories(url))
+
+
     print('getting information from pages (about answers)...')
-    tasks = [asyncio.create_task(get_info_from_page.get_requests(link)) for link in links]
-    questions = await asyncio.gather(*tasks)
+    questions = await asyncio.gather(*[get_info_from_page.get_requests(link) for link in links])
     print('done!')
 
     save_info.save_to_csv(questions, categories)
@@ -42,7 +45,6 @@ async def async_main():
 
 if __name__ == '__main__':
     if int(input("0 - sync, 1 - async\n")):
-        asyncio.run(async_main())    # ~ 4.3-5.6  sec
+        asyncio.run(async_main())
     else:
-        main()    # - 48.5 sec
-    # балдеж
+        main()
