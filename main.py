@@ -21,9 +21,9 @@ async def async_main():
 
     print('getting categories and links...')
     for page in pages:
-        url += f'?page={page}'
-        links.extend(await get_info_from_page.get_page_numbers(url))
-        categories.extend(await get_info_from_page.get_categories(url))
+        page_url = url + f'?page={page}'
+        links.extend(await get_info_from_page.get_page_numbers(page_url))
+        categories.extend(await get_info_from_page.get_categories(page_url))
     print('done!')
 
     print('getting information from pages (about answers)...')
