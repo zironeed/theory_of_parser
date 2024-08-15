@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from services_async import get_info_from_page, save_info
 
 
-env_path = '/.env'
+env_path = '.env'
 load_dotenv(dotenv_path=env_path)
 
 
@@ -14,13 +14,15 @@ async def async_main():
     links, categories = [], []
 
     url = getenv('MAIN_URL')
+    print('getting pages...')
     pages = await get_info_from_page.get_pagination(url)
+    print('done!')
 
     print('getting categories and links...')
     for page in pages:
         url += f'?page={page}'
-        links.append(await get_info_from_page.get_page_numbers(url))
-        categories.append(await get_info_from_page.get_categories(url))
+        links.extend(await get_info_from_page.get_page_numbers(url))
+        categories.extend(await get_info_from_page.get_categories(url))
     print('done!')
 
     print('getting information from pages (about answers)...')
