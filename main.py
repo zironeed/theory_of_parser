@@ -1,15 +1,21 @@
 import asyncio
+from os import getenv
 from time import time
+from dotenv import load_dotenv
 
 from services.get_and_save import get_page_numbers, get_requests, save_to_csv, get_categories   # sync
 
 from services_async import get_info_from_page, save_info                                        # async
 
 
+env_path = '/.env'
+load_dotenv(dotenv_path=env_path)
+
+
 def main():
     start = time()
 
-    url = 'https://easyoffer.ru/rating/python_developer'
+    url = getenv('MAIN_URL')
 
     links = get_page_numbers(url)
     categories = get_categories(url)

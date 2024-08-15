@@ -1,3 +1,4 @@
+from os import getenv
 import aiohttp
 from bs4 import BeautifulSoup
 import re
@@ -77,7 +78,7 @@ async def get_requests(link):
     """
 
     async with aiohttp.ClientSession() as session:
-        html = await fetch(session, "https://easyoffer.ru/question/" + link)
+        html = await fetch(session, getenv('SECONDARY_URL') + link)
         soup = BeautifulSoup(html, 'lxml')
 
         title = soup.find_all('h1', class_='mt-5 mb-5 fs-3')
