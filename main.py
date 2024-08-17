@@ -10,7 +10,6 @@ load_dotenv(dotenv_path=env_path)
 
 
 async def async_main():
-    start = time()
     links, categories = [], []
     semaphore = asyncio.Semaphore(100)
 
@@ -31,8 +30,6 @@ async def async_main():
     print('done!')
 
     save_info.save_to_csv(questions, categories)
-
-    print(time()-start)
 
 
 if __name__ == '__main__':
