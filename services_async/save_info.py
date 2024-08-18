@@ -6,7 +6,7 @@ def save_to_csv(questions: list, categories: list):
     Сохраняем вопросики в CSV-файл
     :param questions: вопросы
     :param categories: список категорий
-    :return: пусто
+    :return: пусто, сохранение инфы
     """
     print('saving questions to a CSV-file...')
 

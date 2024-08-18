@@ -12,8 +12,8 @@ async def fetch(session, url):
 async def get_pagination(url):
     """
     Получаем количество страниц с вопросами
-    :param url: урл
-    :return: ссылки на следующие страницы
+    :param url: урл главной страницы
+    :return: ссылки на страницы списков
     """
     async with aiohttp.ClientSession() as session:
         html = await fetch(session, url)
@@ -31,7 +31,7 @@ async def get_pagination(url):
 async def get_categories(url):
     """
     Получаем категории вопросов
-    :param url: урл
+    :param url: урл списка
     :return: список категорий
     """
 
@@ -52,7 +52,7 @@ async def get_categories(url):
 async def get_page_numbers(url):
     """
     Получаем номера страниц вопросов
-    :param url: урл
+    :param url: урл списка
     :return: необходимые ссылки на страницы
     """
 
@@ -75,7 +75,7 @@ async def get_page_numbers(url):
 async def get_requests(link, sem):
     """
     Получаем информацию со страниц
-    :param link: страницы
+    :param link: страницы с вопросами
     :return: список вопросов (список кортежей)
     """
     async with sem:
