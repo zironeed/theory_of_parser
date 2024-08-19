@@ -25,7 +25,7 @@ def save_to_csv(questions: list, categories: list):
                 'category': categories[ind]
             })
 
-    print('done!')
+    print('saving questions to a CSV-file - done!')
 
 
 def save_to_sql():
