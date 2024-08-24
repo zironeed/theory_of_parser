@@ -37,7 +37,20 @@ class DatabaseManager:
         Создание таблицы, если она не существует
         :return: None
         """
-        pass
+        conn = await self.get_connect()
+        try:
+            await conn.execute("""
+                CREATE TABLE IF NOT EXISTS questions(
+                    id SERIAL PRIMARY KEY,
+                    category VARCHAR(100),
+                    question TEXT,
+                    answer TEXT
+                )
+            """)
+        except asyncpg.DuplicateTableError:
+            print('Table already exists')
+        finally:
+            conn.close()
 
     async def save_to_sql(self):
         """
