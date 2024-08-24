@@ -16,12 +16,15 @@ class DatabaseManager:
         self.password = getenv('DB_PASSWORD')
         self.host = getenv('DB_HOST')
 
+    async def get_connect(self):
+        return await asyncpg.connect(database=self.database, host=self.host, user=self.user, password=self.password)
+
     async def create_database(self):
         """
         Создание базы данных, если она не существует
         :return: None
         """
-        conn = await asyncpg.connect(database=self.database, host=self.host, user=self.user, password=self.password)
+        conn = await self.get_connect()
         try:
             await conn.execute(f'CREATE DATABASE {self.database}')
         except asyncpg.DuplicateDatabaseError:
