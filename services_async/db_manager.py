@@ -21,6 +21,13 @@ class DatabaseManager:
         Создание базы данных, если она не существует
         :return: None
         """
+        conn = await asyncpg.connect(database=self.database, host=self.host, user=self.user, password=self.password)
+        try:
+            await conn.execute(f'CREATE DATABASE {self.database}')
+        except asyncpg.DuplicateDatabaseError:
+            print(f'Database {self.database} already exists')
+        finally:
+            conn.close()
 
     async def create_table(self):
         """
