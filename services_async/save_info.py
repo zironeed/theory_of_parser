@@ -28,5 +28,10 @@ def save_to_csv(questions: list, categories: list):
     print('saving questions to a CSV-file - done!')
 
 
-def save_to_sql():
+def save_to_sql(csv_file):
+    """
+    Сохранение всего в базу данных
+    :param csv_file: csv-файл формата "вопрос,ответ,категория"
+    :return:
+    """
     ...
