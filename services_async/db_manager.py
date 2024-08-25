@@ -52,12 +52,25 @@ class DatabaseManager:
         finally:
             conn.close()
 
-    async def save_to_sql(self):
+    async def save_to_sql(self, csv_file):
         """
-        Сохранение данных из CSV-файлы в БД
-        :return:
+        Сохранение данных из CSV-файла в БД
+        :return: None
         """
-        pass
+        conn = await self.get_connect()
+
+        try:
+            async with aiofiles.open(csv_file, 'r', encoding='utf-8') as file:
+                rows = [row async for row in aiocsv.AsyncDictReader(file)]
+
+            async with conn.transaction():
+                for row in rows:
+                    conn.execute(f"""
+                    INSERT INTO questions (category, question, answer)
+                    VALUES {row['category']} {row['question']} {row['answer']}
+                    """)
+        finally:
+            conn.close()
 
     async def setup_database(self):
         """
