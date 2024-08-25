@@ -29,7 +29,7 @@ class DatabaseManager:
         except asyncpg.DuplicateDatabaseError:
             print(f'Database {self.database} already exists')
         finally:
-            conn.close()
+            await conn.close()
 
     async def create_table(self):
         """
@@ -49,7 +49,7 @@ class DatabaseManager:
         except asyncpg.DuplicateTableError:
             print('Table already exists')
         finally:
-            conn.close()
+            await conn.close()
 
     async def save_to_sql(self, csv_file):
         """
@@ -64,12 +64,13 @@ class DatabaseManager:
 
             async with conn.transaction():
                 for row in rows:
-                    conn.execute(f"""
+                    print(row)
+                    await conn.execute(f"""
                     INSERT INTO questions (category, question, answer)
-                    VALUES {row['category']} {row['question']} {row['answer']}
-                    """)
+                    VALUES ($1, $2, $3)
+                    """, row['category'], row['question'], row['answer'])
         finally:
-            conn.close()
+            await conn.close()
 
     async def setup_database(self):
         """
