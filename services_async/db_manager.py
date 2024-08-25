@@ -1,4 +1,3 @@
-import asyncio
 import aiofiles
 import asyncpg
 import aiocsv
@@ -75,6 +74,7 @@ class DatabaseManager:
     async def setup_database(self):
         """
         Совмещение функций по созданию базы данных и таблицы
-        :return:
+        :return: None
         """
-        pass
+        await self.create_database()
+        await self.create_table()
