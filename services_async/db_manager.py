@@ -9,11 +9,11 @@ class DatabaseManager:
     Класс для взаимодействия с базой данных и данными в ней
     """
 
-    def __init__(self):
-        self.database = getenv('DB_NAME')
-        self.user = getenv('DB_USER')
-        self.password = getenv('DB_PASSWORD')
-        self.host = getenv('DB_HOST')
+    def __init__(self, database, user, password, host):
+        self.database = database
+        self.user = user
+        self.password = password
+        self.host = host
 
     async def get_connect(self):
         return await asyncpg.connect(database=self.database, host=self.host, user=self.user, password=self.password)
