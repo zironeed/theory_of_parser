@@ -64,7 +64,6 @@ class DatabaseManager:
 
             async with conn.transaction():
                 for row in rows:
-                    print(row)
                     await conn.execute(f"""
                     INSERT INTO questions (category, question, answer)
                     VALUES ($1, $2, $3)
