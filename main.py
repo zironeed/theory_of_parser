@@ -2,7 +2,7 @@ import asyncio
 from os import getenv
 from dotenv import load_dotenv
 from services_async import get_info_from_page, save_info
-from services_async.db_manager import DatabaseManager
+from managers.db_manager import DatabaseManager
 
 
 env_path = '.env'

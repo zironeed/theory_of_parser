@@ -1,7 +1,6 @@
 import aiofiles
 import asyncpg
 import aiocsv
-from os import getenv
 
 
 class DatabaseManager:
