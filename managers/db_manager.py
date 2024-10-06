@@ -15,12 +15,14 @@ class DatabaseManager:
         self.host = host
 
     async def get_connect(self):
+        """
+        Подключение к базе данных
+        """
         return await asyncpg.connect(database=self.database, host=self.host, user=self.user, password=self.password)
 
     async def create_database(self):
         """
         Создание базы данных, если она не существует
-        :return: None
         """
         conn = await self.get_connect()
         try:
@@ -33,7 +35,6 @@ class DatabaseManager:
     async def create_table(self):
         """
         Создание таблицы, если она не существует
-        :return: None
         """
         conn = await self.get_connect()
         try:
@@ -53,7 +54,6 @@ class DatabaseManager:
     async def save_to_sql(self, csv_file):
         """
         Сохранение данных из CSV-файла в БД
-        :return: None
         """
         conn = await self.get_connect()
 
@@ -73,7 +73,6 @@ class DatabaseManager:
     async def setup_database(self):
         """
         Совмещение функций по созданию базы данных и таблицы
-        :return: None
         """
         await self.create_database()
         await self.create_table()
