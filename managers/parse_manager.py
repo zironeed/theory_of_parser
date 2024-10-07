@@ -20,7 +20,7 @@ class ParseManager:
         async with session.get(url) as response:
             return await response.text()
 
-    async def get_pagination(self):
+    async def get_pagination(self) -> list:
         """
         Получаем количество страниц с вопросами
         :return: ссылки на страницы списков
@@ -37,3 +37,27 @@ class ParseManager:
             page_numbers.append(1)
 
             return page_numbers
+
+    async def get_categories(self, pagination_num: int) -> list:
+        """
+        Получаем категории вопросов
+        :param pagination_num: номер страницы каталога
+        :return: список категорий
+        """
+        pass
+
+    async def get_page_numbers(self, pagination_num: int) -> list:
+        """
+        Получаем номера страниц вопросов
+        :param pagination_num: номер страницы каталога
+        :return: необходимые ссылки на страницы
+        """
+        pass
+
+    async def get_requests(self, link) -> list[tuple]:
+        """
+        Получаем информацию со страниц
+        :param link: url вопроса
+        :return: список вопросов
+        """
+        pass
