@@ -5,24 +5,24 @@ import aiocsv
 
 class DatabaseManager:
     """
-    Класс для взаимодействия с базой данных и данными в ней
+    Класс для взаимодействия с базой данных и таблицей
     """
 
-    def __init__(self, database, user, password, host):
+    def __init__(self, database: str, user: str, password: str, host: str) -> None:
         self.database = database
         self.user = user
         self.password = password
         self.host = host
 
-    async def get_connect(self):
+    async def get_connect(self) -> None:
         """
         Подключение к базе данных
         """
         return await asyncpg.connect(database=self.database, host=self.host, user=self.user, password=self.password)
 
-    async def create_database(self):
+    async def create_database(self) -> None:
         """
-        Создание базы данных, если она не существует
+        Создание базы данных/проверка на существование БД
         """
         conn = await self.get_connect()
         try:
@@ -32,9 +32,9 @@ class DatabaseManager:
         finally:
             await conn.close()
 
-    async def create_table(self):
+    async def create_table(self) -> None:
         """
-        Создание таблицы, если она не существует
+        Создание таблицы/проверка на существование таблицы в БД
         """
         conn = await self.get_connect()
         try:
@@ -51,9 +51,9 @@ class DatabaseManager:
         finally:
             await conn.close()
 
-    async def save_to_sql(self, csv_file):
+    async def save_to_sql(self, csv_file: str) -> None:
         """
-        Сохранение данных из CSV-файла в БД
+        Сохранение данных из CSV-файла в таблицу БД
         """
         conn = await self.get_connect()
 
@@ -70,9 +70,9 @@ class DatabaseManager:
         finally:
             await conn.close()
 
-    async def setup_database(self):
+    async def setup_database(self) -> None:
         """
-        Совмещение функций по созданию базы данных и таблицы
+        Совмещение методов создания базы данных и таблицы
         """
         await self.create_database()
         await self.create_table()
