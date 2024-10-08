@@ -1,6 +1,6 @@
 import aiofiles
-import asyncpg
 import aiocsv
+import asyncpg
 
 
 class DatabaseManager:
