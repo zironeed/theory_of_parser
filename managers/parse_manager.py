@@ -50,7 +50,18 @@ class ParseManager:
         :param pagination_num: номер страницы каталога
         :return: список категорий
         """
-        pass
+        categories = []
+
+        async with aiohttp.ClientSession() as session:
+            html = await self.fetch(session, pagination_num)
+            soup = BeautifulSoup(html, 'lxml')
+            cats = soup.find_all('td', class_='d-none d-sm-table-cell')
+
+            for category in cats:
+                cat = re.sub(r'<[^>]*>', '', str(category))
+                categories.append(cat)
+
+        return categories
 
     async def get_page_numbers(self, pagination_num: int) -> list:
         """
