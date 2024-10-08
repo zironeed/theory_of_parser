@@ -17,6 +17,12 @@ class ParseManager:
 
     @staticmethod
     async def fetch(session, url):
+        """
+        Загрузка данных со страницы
+        :param session: aiohttp сессия
+        :param url: url-адрес страницы
+        :return: текст страницы
+        """
         async with session.get(url) as response:
             return await response.text()
 
