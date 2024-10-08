@@ -9,7 +9,7 @@ class ParseManager:
     Класс для парсинга данных
     """
 
-    def __init__(self, main_url, secondary_url):
+    def __init__(self, main_url: str, secondary_url: str) -> None:
         self.main_url = main_url
         self.secondary_url = secondary_url
         self.semaphore = asyncio.Semaphore(100)
