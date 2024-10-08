@@ -84,10 +84,27 @@ class ParseManager:
 
         return links
 
-    async def get_requests(self, link) -> list[tuple]:
+    async def get_requests(self, link) -> tuple[str, str]:
         """
         Получаем информацию со страниц
         :param link: url вопроса
         :return: список вопросов
         """
-        pass
+        async with self.semaphore:
+            async with aiohttp.ClientSession() as session:
+                html = await self.fetch(session, self.secondary_url + link)
+                soup = BeautifulSoup(html, 'lxml')
+
+                title = soup.find_all('h1', class_='mt-5 mb-5 fs-3')
+                title_text = re.sub('<[^<]+?>', '', str(title[0]))
+
+                text = soup.find_all('div', class_='card-body')
+                text_list = [re.sub('<[^<]+?>', '', str(p)) for p in text]
+
+            if text_list:
+                text_list = text_list[0].split('\n')[1:-2]
+            text_str = ' '.join(text_list)
+            for i in ['\xa0', '\r', '\u202F']:
+                text_str = text_str.replace(i, ' ')
+
+        return title_text, text_str
