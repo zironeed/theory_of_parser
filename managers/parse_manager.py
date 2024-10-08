@@ -69,7 +69,20 @@ class ParseManager:
         :param pagination_num: номер страницы каталога
         :return: необходимые ссылки на страницы
         """
-        pass
+        links = []
+
+        async with aiohttp.ClientSession() as session:
+            html = await self.fetch(session, pagination_num)
+            soup = BeautifulSoup(html, 'lxml')
+            quotes = soup.find_all('a',
+                                   class_='link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 '
+                                          'link-underline-opacity-75-hover')
+
+            for link in quotes:
+                page_number = re.search(r'/(\d+)', link.get('href')).group(1)
+                links.append(page_number)
+
+        return links
 
     async def get_requests(self, link) -> list[tuple]:
         """
