@@ -18,7 +18,7 @@ class ParseManager:
     async def fetch(session, url):
         """
         Загрузка данных со страницы
-        :param session: aiohttp сессия
+        :param session: aiohttp-сессия
         :param url: url-адрес страницы
         :return: текст страницы
         """
