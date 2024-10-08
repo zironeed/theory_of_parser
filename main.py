@@ -1,6 +1,8 @@
 import asyncio
 from os import getenv
 from dotenv import load_dotenv
+
+from managers.parse_manager import ParseManager
 from services_async import get_info_from_page, save_info
 from managers.db_manager import DatabaseManager
 
@@ -10,11 +12,16 @@ load_dotenv(dotenv_path=env_path)
 
 
 async def async_main():
-    manager = DatabaseManager(
+    db_manager = DatabaseManager(
         database=getenv('DB_NAME'),
         user=getenv('DB_USER'),
         password=getenv('DB_PASSWORD'),
         host=getenv('DB_HOST')
+    )
+
+    parse_manager = ParseManager(
+        main_url=getenv('MAIN_URL'),
+        secondary_url=getenv('SECONDARY_URL')
     )
 
     links, categories = [], []
@@ -39,8 +46,8 @@ async def async_main():
     save_info.save_to_csv(questions, categories)
 
     print('working with database...')
-    await manager.setup_database()
-    await manager.save_to_sql('data.csv')
+    await db_manager.setup_database()
+    await db_manager.save_to_sql('data.csv')
     print('working with database - done!')
 
 
