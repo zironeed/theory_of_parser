@@ -77,7 +77,7 @@ class DatabaseManager:
         await self.create_database()
         await self.create_table()
 
-    async def start(self, csv_file: str) -> None:
+    async def start_processing(self, csv_file: str) -> None:
         """
         Запуск БД менеджера
         :param csv_file: csv-файл с данными
