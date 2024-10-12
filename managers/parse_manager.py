@@ -14,15 +14,14 @@ class ParseManager:
         self.secondary_url = secondary_url
         self.semaphore = asyncio.Semaphore(100)
 
-    @staticmethod
-    async def fetch(session, url):
+    async def fetch(self, session, additional=None):
         """
         Загрузка данных со страницы
         :param session: aiohttp-сессия
-        :param url: url-адрес страницы
+        :param additional: дополнительная информация для url-адреса
         :return: текст страницы
         """
-        async with session.get(url) as response:
+        async with session.get(self.main_url + str(additional)) as response:
             return await response.text()
 
     async def get_pagination(self) -> list:
@@ -107,3 +106,20 @@ class ParseManager:
                 text_str = text_str.replace(i, ' ')
 
         return title_text, text_str
+
+    async def start_parse(self):
+        """
+        Запуск парсинг менеджера
+        :return: (вопрос, ответ), категория
+        """
+        links, categories = [], []
+
+        catalog_pages = await self.get_pagination()
+
+        for catalog_page in catalog_pages:
+            links.extend(await self.get_page_numbers(catalog_page))
+            categories.extend(await self.get_categories(catalog_page))
+
+        questions = await asyncio.gather(*[self.get_requests(link) for link in links])
+
+        return questions, categories
